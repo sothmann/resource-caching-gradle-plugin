@@ -27,17 +27,21 @@ import java.security.MessageDigest;
 
 class HashFiles extends SourceTask {
 
-  @Input String hashAlgorithm = "SHA-1"
-  @OutputDirectory File dest
+	@Input String hashAlgorithm = "SHA-1"
+	@OutputDirectory File dest
 
-  @TaskAction
-  def hashFiles() {
-    source.each { f ->
-      MessageDigest digest = MessageDigest.getInstance(hashAlgorithm);
-      Formatter hexHash = new Formatter()
-      digest.digest(f.bytes).each { b -> hexHash.format('%02x', b) }
-      File out = new File(dest, "${hexHash.toString()}.cache.js")
-	  out.text = f.text
+	@TaskAction
+	def hashFiles() {
+		dest.eachFileRecurse { File f ->
+			f.delete()
+		}
+		
+		source.each { f ->
+			MessageDigest digest = MessageDigest.getInstance(hashAlgorithm);
+			Formatter hexHash = new Formatter()
+			digest.digest(f.bytes).each { b -> hexHash.format('%02x', b) }
+			File out = new File(dest, "${hexHash.toString()}.cache.js")
+			out.text = f.text
+		}
 	}
-  }
 }
