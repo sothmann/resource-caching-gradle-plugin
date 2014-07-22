@@ -39,7 +39,7 @@ javadoc {
 }
 
 group='de.richsource.gradle.plugins'
-version='0.2-SNAPSHOT'
+version='0.2'
 publishing {
 	publications {
 		mavenJava(MavenPublication) {

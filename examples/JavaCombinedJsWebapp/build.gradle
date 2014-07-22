@@ -24,7 +24,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'de.richsource.gradle.plugins:resource-caching-gradle-plugin:0.2-SNAPSHOT'
+		classpath 'de.richsource.gradle.plugins:resource-caching-gradle-plugin:0.2'
 		classpath 'com.eriwen:gradle-js-plugin:1.12.0'
 	}
 }
