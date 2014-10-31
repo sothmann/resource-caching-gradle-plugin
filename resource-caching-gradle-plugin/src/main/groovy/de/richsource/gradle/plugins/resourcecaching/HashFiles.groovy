@@ -36,11 +36,12 @@ class HashFiles extends SourceTask {
 			f.delete()
 		}
 		
-		source.each { f ->
+		source.each { File f ->
 			MessageDigest digest = MessageDigest.getInstance(hashAlgorithm);
 			Formatter hexHash = new Formatter()
 			digest.digest(f.bytes).each { b -> hexHash.format('%02x', b) }
-			File out = new File(dest, "${hexHash.toString()}.cache.js")
+			String extension = f.name.substring(f.name.lastIndexOf('.')+1)
+			File out = new File(dest, "${hexHash.toString()}.cache.${extension}")
 			out.text = f.text
 		}
 	}
