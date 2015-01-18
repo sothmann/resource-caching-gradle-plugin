@@ -17,20 +17,20 @@ import org.gradle.api.invocation.Gradle;
  */
 
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			url new File(projectDir.parentFile.parentFile, 'repo').toURI()
-		}
-	}
-	dependencies {
-		classpath 'de.richsource.gradle.plugins:resource-caching-gradle-plugin:0.3-SNAPSHOT'
-		classpath 'com.eriwen:gradle-js-plugin:1.12.0'
-	}
+  repositories {
+    mavenCentral()
+    maven {
+      url new File(projectDir.parentFile.parentFile, 'repo').toURI()
+    }
+  }
+  dependencies {
+    classpath 'de.richsource.gradle.plugins:resource-caching-gradle-plugin:0.4-SNAPSHOT'
+    classpath 'com.eriwen:gradle-js-plugin:1.12.0'
+  }
 }
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 apply plugin: 'war'
@@ -39,21 +39,26 @@ apply plugin: 'js'
 apply plugin: 'resource-caching'
 
 dependencies {
-    providedCompile "javax.servlet:servlet-api:2.5"
+  providedCompile "javax.servlet:servlet-api:2.5"
 }
 
 combineJs {
-    source = 'src/main/js'
-    dest = file("${buildDir}/combined/combined.js")
+  source = 'src/main/js'
+  dest = file("${buildDir}/combined/combined.js")
 }
 
-task hashFiles(type: de.richsource.gradle.plugins.resourcecaching.HashFiles) {
+task hashJsFiles(type: de.richsource.gradle.plugins.resourcecaching.HashFiles) {
   source = combineJs
-  dest = file("$buildDir/hashed")
+  dest = file("$buildDir/hashedJs")
+}
+
+task hashCssFiles(type: de.richsource.gradle.plugins.resourcecaching.HashFiles) {
+  source = files('src/main/css/app.css')
+  dest = file("$buildDir/hashedCss")
 }
 
 task generateHostPage(type: de.richsource.gradle.plugins.resourcecaching.GenerateHostPage) {
-  source = hashFiles
+  source(hashJsFiles, hashCssFiles)
   dest = file("$buildDir/index_html/index.html")
   template = file('src/main/webapp/index.html.template')
 }
@@ -63,7 +68,10 @@ war {
   includeEmptyDirs = false
   from generateHostPage
   into("js") {
-    from hashFiles
+    from hashJsFiles
+  }
+  into("css") {
+    from hashCssFiles
   }
   exclude 'index.html.template'
 }

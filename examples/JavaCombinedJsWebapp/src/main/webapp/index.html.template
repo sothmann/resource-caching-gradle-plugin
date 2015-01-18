@@ -1,6 +1,7 @@
 <html>
 <head>
 @generatedScriptTags@
+@generatedCssTags@
 </head>
 <body>
   <h1>JS Caching</h1>
