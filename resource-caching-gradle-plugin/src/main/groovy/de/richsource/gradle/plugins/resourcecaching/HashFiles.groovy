@@ -18,10 +18,7 @@ package de.richsource.gradle.plugins.resourcecaching;
 
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.OutputDirectory
-import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction
 import java.security.MessageDigest;
 
@@ -42,7 +39,7 @@ class HashFiles extends SourceTask {
 			digest.digest(f.bytes).each { b -> hexHash.format('%02x', b) }
 			String extension = f.name.substring(f.name.lastIndexOf('.')+1)
 			File out = new File(dest, "${hexHash.toString()}.cache.${extension}")
-			out.text = f.text
+			ant.copy(file: "$f.canonicalPath", tofile: "$out.canonicalPath")
 		}
 	}
 }
