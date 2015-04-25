@@ -16,10 +16,7 @@ As this is not a core Gradle plugin, you have to ensure, that Gradle knows how t
 
 	buildscript {
 	  repositories {
-		maven {
-		  url 'https://dl.bintray.com/sothmann/gradle-plugins/'
-		}
-		mavenCentral()
+		jcenter()
 	  }
 	  dependencies {
 		classpath 'de.richsource.gradle.plugins:resource-caching-gradle-plugin:0.4'
